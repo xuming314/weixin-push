@@ -57,7 +57,7 @@ describe('lib/proxy.js', function () {
 
     it('should reponse err', function (done) {
       mm.error(urllib, 'request', 'mock error');
-      proxy.singleSend('123', 'test', 'cookie', function (err) {
+      proxy.singleSend('123', 'test', 'cookie', 'token', function (err) {
         err.message.should.equal('mock error');
         done();
       });
@@ -69,7 +69,7 @@ describe('lib/proxy.js', function () {
           callback(null, 'test', {statusCode: 302});
         });
       });
-      proxy.singleSend('123', 'test', 'cookie', function (err) {
+      proxy.singleSend('123', 'test', 'cookie', 'token', function (err) {
         err.message.should.equal('singleSend Error! status code:302');
         done();
       });
@@ -81,7 +81,7 @@ describe('lib/proxy.js', function () {
           callback(null, 'test', {statusCode: 200});
         });
       });
-      proxy.singleSend('123', 'test', 'cookie', function (err) {
+      proxy.singleSend('123', 'test', 'cookie', 'token', function (err) {
         err.message.should.equal('singleSend Error! Unexpected token e');
         done();
       });      
@@ -93,7 +93,7 @@ describe('lib/proxy.js', function () {
           callback(null, '{"ret":0, "msg":"ok"}', {statusCode: 200});
         });
       });
-      proxy.singleSend('123', 'test', 'cookie', function (err, data) {
+      proxy.singleSend('123', 'test', 'cookie', 'token', function (err, data) {
         should.not.exist(err);
         data.should.eql({ret: 0, msg: 'ok'});
         done();
@@ -152,7 +152,7 @@ describe('lib/proxy.js', function () {
   describe('#getMessage', function () {
     it('should reponse err', function (done) {
       mm.error(urllib, 'request', 'mock error');
-      proxy.getMessage('123', 'test', 'cookie', 100, function (err) {
+      proxy.getMessage('cookie', 'token', '123', 'test', 100, function (err) {
         err.message.should.equal('mock error');
         done();
       });
@@ -164,7 +164,7 @@ describe('lib/proxy.js', function () {
           callback(null, 'test', {statusCode: 302});
         });
       });
-      proxy.getMessage('123', 'test', 'cookie', 100, function (err) {
+      proxy.getMessage('cookie', 'token', '123', 'test', 100, function (err) {
         err.message.should.equal('getMessage Error! status code:302');
         done();
       });
@@ -176,7 +176,7 @@ describe('lib/proxy.js', function () {
           callback(null, 'test', {statusCode: 200});
         });
       });
-      proxy.getMessage('123', 'test', 'cookie', 100, function (err) {
+      proxy.getMessage('cookie', 'token', '123', 'test', 100, function (err) {
         err.message.should.equal('getMessage Error! Unexpected token e');
         done();
       });      
@@ -188,7 +188,7 @@ describe('lib/proxy.js', function () {
           callback(null, new Buffer('[]'), {statusCode: 200});
         });
       });
-      proxy.getMessage('123', 'test', 'cookie', 100, function (err, data) {
+      proxy.getMessage('cookie', 'token', '123', 'test', 100, function (err, data) {
         should.not.exist(err);
         data.should.eql([]);
         done();

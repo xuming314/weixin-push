@@ -17,7 +17,7 @@ var pusher;
 var loginBack;
 describe('lib/pushwechat.js', function () {
   before(function (done) {
-    pusher = Pusher.create('testname', 'testpwd');
+    pusher = Pusher.create('testname', 'testpwd', 'token');
     loginBack = proxy.login;
     proxy.login = function (name, pwd, callback) {
       process.nextTick(function () {
