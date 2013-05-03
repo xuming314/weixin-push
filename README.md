@@ -7,8 +7,7 @@ pushwechat![travis-ci](https://secure.travis-ci.org/dead-horse/weixin-push.png)
 
 ``` js
 var Pusher = require('pwechat');
-//token可以在登录微信公众平台后台的URL中看到（URL中可以看到token=xxxx）。
-var pusher = Pusher.create('youremail', 'yourpassword', 'yourtoken');
+var pusher = Pusher.create('youremail', 'yourpassword');
 
 pusher.on('PWwchatError', function (err) {
   console.log(err); //无法登录后台

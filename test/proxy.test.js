@@ -41,12 +41,12 @@ describe('lib/proxy.js', function () {
     it('should response ok', function (done) {
       mm(urllib, 'request', function (url, opts, callback) {
         process.nextTick(function () {
-          callback(null, '{"ErrCode": 0}', {statusCode: 200, headers: {'set-cookie': ['mock cookie'] }});
+          callback(null, '{"ErrCode": 0}', {statusCode: 200, headers: {'set-cookie': ['a=b;'] }});
         }); 
       });
       proxy.login('test@gmail.com', '123', function (err, data) {
         should.not.exist(err);
-        data.should.equal('mock cookie');
+        data.should.equal('a=b;');
         done();
       });
     });
@@ -115,23 +115,23 @@ describe('lib/proxy.js', function () {
     it('should response error by statusCode', function (done) {
       mm(urllib, 'request', function (url, opts, callback) {
         process.nextTick(function () {
-          callback(null, 'test', {statusCode: 302});
+          callback(null, 'test', {statusCode: 500});
         });
       });
       proxy.refresh('cookie', function (err) {
-        err.message.should.equal('refresh Error! status code:302');
+        err.message.should.equal('refresh Error! status code:500');
         done();
       });
     });
 
-    it('should refresh error by data', function (done) {
+    it('should refresh error by header error', function (done) {
       mm(urllib, 'request', function (url, opts, callback) {
         process.nextTick(function () {
-          callback(null, '{"ret":0, "msg":"ok"}', {statusCode: 200});
+          callback(null, '', {statusCode: 302});
         });
       });
       proxy.refresh('cookie', function (err) {
-        err.message.should.equal('login become invalid');
+        err.message.should.equal('Refresh error, can not get token');
         done();
       });
     });
@@ -139,11 +139,12 @@ describe('lib/proxy.js', function () {
     it('should refresh ok', function (done) {
       mm(urllib, 'request', function (url, opts, callback) {
         process.nextTick(function () {
-          callback(null, new Buffer('实时消息'), {statusCode: 200});
+          callback(null, '', {statusCode: 200, headers: {location: 'token=1234324'}});
         });
       });
-      proxy.refresh('cookie', function (err) {
+      proxy.refresh('cookie', function (err, data) {
         should.not.exist(err);
+        data.should.equal('1234324');
         done();
       });
     });
