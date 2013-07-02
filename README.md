@@ -33,6 +33,31 @@ pusher.getMessage('@help', 10, 1000, function (err, data) {
 });
 ```
 
+/**
+ * 给单个用户发送微信图文消息
+ * @param {String} username 用户username
+ * @param {String} appMsgId 素材Id 如10000005
+ * @param {Array} picMsgs
+ * [
+ *      {
+ *          title 标题
+ *          digest 正文摘要
+ *          content 正文展开
+ *          fileid 封面图片Id 如10000002
+ *          sourceurl 链接地址
+ *      }
+ * ]
+ */
+pusher.singleSendPicMsg('username1', 10000005,
+  [
+    {title: 'myTitle1', digest: 'myDigest1', content: 'myContent1', fileid:10000002, sourceurl:'www.baidu.com'},
+    {title: 'myTitle2', digest: 'myDigest2', content: 'myContent2', fileid:10000003, sourceurl:'www.google.com.hk'}
+  ], 
+  function (err, data) {
+    res.contentType('json');
+    res.send(data);
+  });
+});
 
 ## 安装  
 
