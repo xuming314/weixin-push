@@ -31,7 +31,6 @@ pusher.singleSend('12345, '测试内容', function (err, data) {
 pusher.getMessage('@help', 10, 1000, function (err, data) {
   // 获取成功的响应，data会是一个数组
 });
-```
 
 /**
  * 给单个用户发送微信图文消息
@@ -58,6 +57,8 @@ pusher.singleSendPicMsg('username1', 10000005,
     res.send(data);
   });
 });
+
+```
 
 ## 安装  
 
