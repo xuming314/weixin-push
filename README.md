@@ -18,7 +18,7 @@ pusher.on('PWwchatError', function (err) {
  * @param {String} fakeId 用户fakeId
  * @param {String} content 发送内容
  */
-pusher.singleSend('12345, '测试内容', function (err, data) {
+pusher.singleSend('12345', '测试内容', function (err, data) {
   // 发送成功的响应data.should.eql({ret: 0, msg: 'ok'});
 });
 
