@@ -5,7 +5,8 @@ pushwechat![travis-ci](https://secure.travis-ci.org/dead-horse/weixin-push.png)
 
 ## 用法  
 
-``` js
+```js
+
 var Pusher = require('pwechat');
 var pusher = Pusher.create('youremail', 'yourpassword');
 
@@ -18,9 +19,42 @@ pusher.on('PWwchatError', function (err) {
  * @param {String} fakeId 用户fakeId
  * @param {String} content 发送内容
  */
-pusher.singleSend('12345', '测试内容', function (err, data) {
+pusher.singleSend('12345', 'test content', function (err, data) {
   // 发送成功的响应data.should.eql({ret: 0, msg: 'ok'});
 });
+//除了可以发送文字外，还支持发送其他的微信资源（在微信素材管理中添加）。  
+//type为发送的不同资源类型，不同的类型需要的字段也不同
+//发送前需要把要发送的资源上传到微信，并找到对应的`fid`等字段
+//type:2图片   fid:图片的资源id
+pusher.singleSend('12345', {type:2, fid:1000002}, function (err, data) {
+  // 发送成功的响应data.should.eql({ret: 0, msg: 'ok'});
+});
+//type:10图文
+pusher.singleSend('12345', {type:10, fid:1000003, fileid:1000004, appmsgid:1000003}, function (err, data) {
+  // 发送成功的响应data.should.eql({ret: 0, msg: 'ok'});
+});
+
+
+/**
+ * 给单个用户发送"动态"微信图文消息
+ * @param {String} username 用户username
+ * @param {String} appMsgId 素材Id 如10000005
+ * @param {Array} appMsgs
+ * [
+ *  {title:标题, digest:正文摘要, content:正文展开, fileid:封面图片Id 如10000002, sourceurl:链接地址}
+ * ]
+ */
+pusher.singleSendAppMsg('username1', 10000005,
+  [
+    {title: 'myTitle1', digest: 'myDigest1', content: 'myContent1', fileid:10000002, sourceurl:'www.baidu.com'},
+    {title: 'myTitle2', digest: 'myDigest2', content: 'myContent2', fileid:10000003, sourceurl:'www.google.com.hk'}
+  ],
+  function (err, data) {
+    res.contentType('json');
+    res.send(data);
+  });
+});
+
 
 /**
  * 获取包含关键字的消息
@@ -33,31 +67,14 @@ pusher.getMessage('@help', 10, 1000, function (err, data) {
 });
 
 /**
- * 给单个用户发送微信图文消息
- * @param {String} username 用户username
- * @param {String} appMsgId 素材Id 如10000005
- * @param {Array} picMsgs
- * [
- *      {
- *          title 标题
- *          digest 正文摘要
- *          content 正文展开
- *          fileid 封面图片Id 如10000002
- *          sourceurl 链接地址
- *      }
- * ]
- */
-pusher.singleSendPicMsg('username1', 10000005,
+ * 获取公众账号的粉丝
+ * 响应： 
   [
-    {title: 'myTitle1', digest: 'myDigest1', content: 'myContent1', fileid:10000002, sourceurl:'www.baidu.com'},
-    {title: 'myTitle2', digest: 'myDigest2', content: 'myContent2', fileid:10000003, sourceurl:'www.google.com.hk'}
-  ], 
-  function (err, data) {
-    res.contentType('json');
-    res.send(data);
-  });
-});
-
+    {fakeId:'98106560', nickName:'nick1', remarkName:'', groupId:'0'},
+    {fakeId:'3297485', nickName:'nick2', remarkName:'', groupId:'0'}
+  ]
+ */
+pusher.getUsers(function (err, data) {});
 ```
 
 ## 安装  
@@ -65,6 +82,21 @@ pusher.singleSendPicMsg('username1', 10000005,
 ```
 npm install pwechat
 ```  
+
+## 贡献者们
+$ git summary 
+
+ project  : weixin-push
+ repo age : 3 months ago
+ commits  : 26
+ active   : 8 days
+ files    : 13
+ authors  : 
+    12  dead-horse              46.2%
+     9  不四                  34.6%
+     3  dead_horse              11.5%
+     1  Xiayu                   3.8%
+     1  hsinglin                3.8%
 
 ## Lincense  
 (The MIT License)
